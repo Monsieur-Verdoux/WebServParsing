@@ -54,22 +54,39 @@
 		return _server_blocks;
 	}
 
-	std::vector<std::string> ConfigParser::parseServerBlock(std::vector<std::string>& tokens)
+	void ConfigParser::parseServerBlock(Token& token)
 	{
-		std::vector<std::string> server_block;
-		tokens.shrink_to_fit();
-		// parse server block
-		// return server_block
-		return server_block;
+		_server_blocks.push_back(ServerBlock());
+		for (size_t i = 0; i < _tokens.size(); i++)
+		{
+			if (_tokens[i].type == TokenType::CLOSE)
+			{
+				std::cout << "Closing server block" << std::endl;
+				printServerConfig();
+				break;
+			}
+			else if (_tokens[i].key == "server_name")
+			{
+				_server_blocks[_server_blocks.size() - 1].getServerNames().push_back(_tokens[i].values[0]);
+			}
+			else if (_tokens[i].key == "listen")
+			{
+				_server_blocks[_server_blocks.size() - 1].setListen(std::stoi(_tokens[i].values[0]));
+			}
+			else if (_tokens[i].key == "client_max_body_size")
+			{
+				_server_blocks[_server_blocks.size() - 1].setClientMaxBodySize(_tokens[i].values[0]);
+			}
+			else if (_tokens[i].key == "location")
+			{
+				parseLocationBlock(_tokens[i]);
+			}
+		}
 	}
 
-	std::vector<std::string> ConfigParser::parseLocationBlock(std::vector<std::string>& tokens)
+	void ConfigParser::parseLocationBlock(Token& token)
 	{
-		std::vector<std::string> location_block;
-		tokens.shrink_to_fit();
-		// parse location block
-		// return location_block
-		return location_block;
+		return;
 	}
 
 	#include <algorithm>
@@ -90,6 +107,7 @@
 		std::string word;
 		while (filepath >> word)
 		{
+			std::cout << word << std::endl;
 			if (word  == "{")
 			{
 				tokens.push_back(Token(TokenType::OPEN, word));
@@ -124,8 +142,13 @@
 			else if (std::find(singleValueKeys.begin(), singleValueKeys.end(), word) != singleValueKeys.end())
 			{
 				std::string value;
-				if (filepath >> value)
+				if (word == "server")
 				{
+					tokens.push_back(Token(TokenType::KEY_VALUE, word, ""));
+				}
+				else if (filepath >> value)
+				{
+
 					if (value.back() == ';')
 					{
 						tokens.push_back(Token(TokenType::KEY_VALUE, word, (value.substr(0, value.size() - 1))));
@@ -168,13 +191,38 @@
 
 	std::vector<ServerBlock> ConfigParser::parseConfig(std::ifstream& filepath)
 	{
-		std::vector<ServerBlock> server_blocks;
 		tokenize(_tokens, filepath);
 		printTokens(_tokens);
-		
-		std::vector<std::string> server_block;
-		std::vector<std::string> location_block;
-		return server_blocks;
+	
+		for (size_t i = 0; i < _tokens.size(); i++)
+		{
+			std::cout << "We are at" << _tokens[i].key << std::endl;
+			while (_tokens[i].type == TokenType::COMMENT)
+				i++;
+			if (_tokens[i].key != "server")
+			{
+				std::cout << "Issue at " << tokenTypeToString(_tokens[i].type) << std::endl;
+				throw std::runtime_error("Expected 'server' block");
+			}
+			else
+				parseServerBlock(_tokens[i]);
+		}
+		return _server_blocks;
+	}
+
+	void ConfigParser::printServerConfig()
+	{
+		for (const ServerBlock& server : _server_blocks)
+		{
+			std::cout << "Server names: ";
+			for (const std::string& name : server.getServerNames())
+			{
+				std::cout << name << " ";
+			}
+			std::cout << std::endl;
+			std::cout << "Listen: " << server.getListen() << std::endl;
+			std::cout << "Client max body size: " << server.getClientMaxBodySize() << std::endl;
+		}
 	}
 
 	int main()
