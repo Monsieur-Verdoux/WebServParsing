@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:45:23 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/29 20:09:12 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:32:40 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ std::string ServerBlock::getClientMaxBodySize() const
 	return _client_max_body_size;
 }
 
-void ServerBlock::setServerNames(const std::vector<std::string>& server_names)
+void ServerBlock::setServerName(const std::string& server_name)
 {
-	_server_names = server_names;
+	_server_names.push_back(server_name);
 }
 
 void ServerBlock::setListen(int listen)
@@ -65,9 +65,10 @@ void ServerBlock::setLocations(const std::vector<LocationBlock>& locations)
 	_locations = locations;
 }
 
-void ServerBlock::setErrorPages(const std::map<int, std::string>& error_pages)
+
+void ServerBlock::setErrorPage(int code, const std::string& page)
 {
-	_error_pages = error_pages;
+	_error_pages[code] = page;
 }
 
 void ServerBlock::setHost(const std::string& host)

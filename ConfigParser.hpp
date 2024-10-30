@@ -6,18 +6,20 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 19:39:10 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/29 20:13:31 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:16:31 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIGPARSER_HPP
 #define CONFIGPARSER_HPP
 
+#include "ServerBlock.hpp"
 #include <iostream>
 #include <vector>
 #include <map>
-#include "ServerBlock.hpp"
 #include <fstream>
+#include <algorithm>
+#include <sstream>
 
 enum class TokenType {
 	KEY_VALUE,
@@ -59,9 +61,10 @@ public:
 	std::vector<ServerBlock> parseConfig(std::ifstream& filepath);
 	std::vector<ServerBlock> getServerBlocks() const;
 	void tokenize(std::vector<Token>& tokens, std::ifstream& filepath);
-	void parseServerBlock(Token& token);
-	void parseLocationBlock(Token& token);
+	void parseServerBlock(size_t index);
+	void parseLocationBlock(size_t index);
 	void printServerConfig();
+	void unexpectedToken(size_t i);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:53:25 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/29 20:06:46 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:36:41 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ public:
 	std::map<int, std::string> getErrorPages() const;
 	std::string getHost() const;
 	std::string getClientMaxBodySize() const;
-	void setServerNames(const std::vector<std::string>& server_names);
+	void setServerName(const std::string& server_name);
 	void setListen(int listen);
 	void setLocations(const std::vector<LocationBlock>& locations);
-	void setErrorPages(const std::map<int, std::string>& error_pages);
+	void setErrorPage(int code, const std::string& page);
 	void setHost(const std::string& host);
 	void setClientMaxBodySize(const std::string& client_max_body_size);
 };
