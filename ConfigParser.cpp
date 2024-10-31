@@ -410,7 +410,7 @@
 		}
 		try
 		{
-			config.getServerBlocks() = config.parseConfig(file);
+			config.parseConfig(file);
 		}
 		catch(const std::exception& e)
 		{
