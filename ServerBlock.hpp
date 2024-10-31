@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:53:25 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/30 17:36:41 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:08:14 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ public:
 	~ServerBlock();
 	std::vector<std::string> getServerNames() const;
 	int getListen() const;
-	std::vector<LocationBlock> getLocations() const;
+	std::vector<LocationBlock>& getLocations();	
 	std::map<int, std::string> getErrorPages() const;
 	std::string getHost() const;
 	std::string getClientMaxBodySize() const;

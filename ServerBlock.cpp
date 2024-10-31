@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:45:23 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/30 19:32:40 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:07:01 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int ServerBlock::getListen() const
 	return _listen;
 }
 
-std::vector<LocationBlock> ServerBlock::getLocations() const
+std::vector<LocationBlock>& ServerBlock::getLocations()
 {
 	return _locations;
 }

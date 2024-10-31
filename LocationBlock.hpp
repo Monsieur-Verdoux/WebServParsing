@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:46:15 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/30 19:47:49 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:12:33 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,15 @@ class LocationBlock
 		std::string _upload_max_files; // 10
 		std::string _upload_file_extensions; // .jpg, .jpeg, .png, .gif
 		std::string _proxy_pass; // http://
+		std::string _return;
+		std::string _alias;
+		std::string _client_max_body_size;
 		std::map<int, std::string> _error_pages;
 		std::vector<std::string> _limit_except;
 	public:
 		LocationBlock(/* args */);
 		~LocationBlock();
+		LocationBlock(std::string location);
 		std::string getLocation() const;
 		std::string getRoot() const;
 		std::string getIndex() const;
@@ -49,6 +53,10 @@ class LocationBlock
 		std::string getUploadMaxFiles() const;
 		std::string getUploadFileExtensions() const;
 		std::string getProxyPass() const;
+		std::string getReturn() const;
+		std::string getAlias() const;
+		std::string getClientMaxBodySize() const;
+		std::vector<std::string> getLimitExcept() const;
 		std::map<int, std::string> getErrorPages() const;
 		void setLocation(const std::string& location);
 		void setRoot(const std::string& root);
@@ -63,8 +71,11 @@ class LocationBlock
 		void setUploadFileExtensions(const std::string& upload_file_extensions);
 		void setProxyPass(const std::string& proxy_pass);
 		void setErrorPage(int code, const std::string& page);
+		void setReturn(const std::string& return_val);
+		void setAlias(const std::string& alias);
+		void setClientMaxBodySize(const std::string& client_max_body_size);
 		void printLocationBlock();
-		void setLimitExcept(const std::vector<std::string>& values);
+		void setLimitExcept(const std::vector<std::string>& vals);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 19:39:10 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/30 19:16:31 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:21:11 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ public:
 	std::vector<ServerBlock> parseConfig(std::ifstream& filepath);
 	std::vector<ServerBlock> getServerBlocks() const;
 	void tokenize(std::vector<Token>& tokens, std::ifstream& filepath);
-	void parseServerBlock(size_t index);
-	void parseLocationBlock(size_t index);
+	void parseServerBlock(size_t& index);
+	void parseLocationBlock(size_t& index);
 	void printServerConfig();
 	void unexpectedToken(size_t i);
 };
