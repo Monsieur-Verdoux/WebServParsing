@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:46:15 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/31 18:12:33 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/07 22:31:12 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 class LocationBlock
 {
@@ -23,18 +24,14 @@ class LocationBlock
 		std::string _location; // /path/to/resource
 		std::string _root; // /var/www/html
 		std::string _index; // index.html
-		std::string _autoindex; // on | off
+		bool _autoindex; // on | off
 		std::string _cgi_extension;	// .php, .py, .pl, .rb
 		std::string _cgi_path; // /usr/bin/php-cgi
 		std::string _upload_path; // /var/www/html/uploads
-		std::string _upload_store; // on | off
-		std::string _upload_max_file_size; // 1M
-		std::string _upload_max_files; // 10
-		std::string _upload_file_extensions; // .jpg, .jpeg, .png, .gif
 		std::string _proxy_pass; // http://
 		std::string _return;
 		std::string _alias;
-		std::string _client_max_body_size;
+		size_t _client_max_body_size; // size in bytes, needs to be converted if in human-readable format
 		std::map<int, std::string> _error_pages;
 		std::vector<std::string> _limit_except;
 	public:
@@ -44,18 +41,14 @@ class LocationBlock
 		std::string getLocation() const;
 		std::string getRoot() const;
 		std::string getIndex() const;
-		std::string getAutoindex() const;
+		bool getAutoindex() const;
 		std::string getCgiExtension() const;
 		std::string getCgiPath() const;
 		std::string getUploadPath() const;
-		std::string getUploadStore() const;
-		std::string getUploadMaxFileSize() const;
-		std::string getUploadMaxFiles() const;
-		std::string getUploadFileExtensions() const;
 		std::string getProxyPass() const;
 		std::string getReturn() const;
 		std::string getAlias() const;
-		std::string getClientMaxBodySize() const;
+		size_t getClientMaxBodySize() const;
 		std::vector<std::string> getLimitExcept() const;
 		std::map<int, std::string> getErrorPages() const;
 		void setLocation(const std::string& location);
@@ -65,15 +58,11 @@ class LocationBlock
 		void setCgiExtension(const std::string& cgi_extension);
 		void setCgiPath(const std::string& cgi_path);
 		void setUploadPath(const std::string& upload_path);
-		void setUploadStore(const std::string& upload_store);
-		void setUploadMaxFileSize(const std::string& upload_max_file_size);
-		void setUploadMaxFiles(const std::string& upload_max_files);
-		void setUploadFileExtensions(const std::string& upload_file_extensions);
 		void setProxyPass(const std::string& proxy_pass);
 		void setErrorPage(int code, const std::string& page);
 		void setReturn(const std::string& return_val);
 		void setAlias(const std::string& alias);
-		void setClientMaxBodySize(const std::string& client_max_body_size);
+		void setClientMaxBodySize(std::string& client_max_body_size);
 		void printLocationBlock();
 		void setLimitExcept(const std::vector<std::string>& vals);
 };

@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:45:23 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/31 18:07:01 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/07 22:16:31 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ std::string ServerBlock::getHost() const
 	return _host;
 }
 
-std::string ServerBlock::getClientMaxBodySize() const
+size_t ServerBlock::getClientMaxBodySize() const
 {
 	return _client_max_body_size;
 }
@@ -76,7 +76,10 @@ void ServerBlock::setHost(const std::string& host)
 	_host = host;
 }
 
-void ServerBlock::setClientMaxBodySize(const std::string& client_max_body_size)
+void ServerBlock::setClientMaxBodySize(std::string& client_max_body_size)
 {
-	_client_max_body_size = client_max_body_size;
+	if (client_max_body_size.empty() || !std::all_of(client_max_body_size.begin(), client_max_body_size.end(), ::isdigit)) 
+		throw std::invalid_argument("incorrent client_max_body_size format");
+	else
+		_client_max_body_size = std::stoi(client_max_body_size);
 }

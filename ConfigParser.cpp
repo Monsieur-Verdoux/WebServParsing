@@ -187,22 +187,6 @@
 			{
 				_server_blocks[_server_blocks.size() - 1].getLocations().back().setUploadPath(_tokens[index].values[0]);
 			}
-			else if (_tokens[index].key == "upload_store")
-			{
-				_server_blocks[_server_blocks.size() - 1].getLocations().back().setUploadStore(_tokens[index].values[0]);
-			}
-			else if (_tokens[index].key == "upload_max_file_size")
-			{
-				_server_blocks[_server_blocks.size() - 1].getLocations().back().setUploadMaxFileSize(_tokens[index].values[0]);
-			}
-			else if (_tokens[index].key == "upload_max_files")
-			{
-				_server_blocks[_server_blocks.size() - 1].getLocations().back().setUploadMaxFiles(_tokens[index].values[0]);
-			}
-			else if (_tokens[index].key == "upload_file_extensions")
-			{
-				_server_blocks[_server_blocks.size() - 1].getLocations().back().setUploadFileExtensions(_tokens[index].values[0]);
-			}
 			else if (_tokens[index].key == "proxy_pass")
 			{
 				_server_blocks[_server_blocks.size() - 1].getLocations().back().setProxyPass(_tokens[index].values[0]);

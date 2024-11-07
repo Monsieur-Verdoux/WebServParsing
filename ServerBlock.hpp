@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:53:25 by akovalev          #+#    #+#             */
-/*   Updated: 2024/10/31 18:08:14 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/07 22:15:03 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,19 @@
 #include <vector>
 #include <map>
 #include "LocationBlock.hpp"
+#include <stdint.h>
+#include <string>
+#include <algorithm>
 
 class ServerBlock
 {
 private:
 	std::vector<std::string> _server_names;
-	int _listen; //port
+	uint16_t _listen; //port, range 1-65535
 	std::vector<LocationBlock> _locations;
 	std::map<int, std::string> _error_pages;
 	std::string _host; // IP address, e.g. 127.0.0.1
-	std::string _client_max_body_size; //maybe long?
+	size_t _client_max_body_size; // size in bytes, needs to be converted if in human-readable format
 public:
 	ServerBlock(/* args */);
 	~ServerBlock();
@@ -35,13 +38,13 @@ public:
 	std::vector<LocationBlock>& getLocations();	
 	std::map<int, std::string> getErrorPages() const;
 	std::string getHost() const;
-	std::string getClientMaxBodySize() const;
+	size_t getClientMaxBodySize() const;
 	void setServerName(const std::string& server_name);
 	void setListen(int listen);
 	void setLocations(const std::vector<LocationBlock>& locations);
 	void setErrorPage(int code, const std::string& page);
 	void setHost(const std::string& host);
-	void setClientMaxBodySize(const std::string& client_max_body_size);
+	void setClientMaxBodySize(std::string& client_max_body_size);
 };
 
 
