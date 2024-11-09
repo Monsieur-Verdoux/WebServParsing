@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 19:33:46 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/07 22:31:50 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:16:55 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 LocationBlock::LocationBlock(/* args */)
 {
+	_autoindex = false;
+	_client_max_body_size = 0;
 }
 
 LocationBlock::LocationBlock(std::string location)
 {
+	_autoindex = false;
+	_client_max_body_size = 0;
 	_location = location;
 }
 
@@ -45,7 +49,7 @@ bool LocationBlock::getAutoindex() const
 	return _autoindex;
 }
 
-std::string LocationBlock::getCgiExtension() const
+std::vector<std::string> LocationBlock::getCgiExtension() const
 {
 	return _cgi_extension;
 }
@@ -100,6 +104,10 @@ void LocationBlock::setClientMaxBodySize(std::string& client_max_body_size)
 
 void LocationBlock::setAlias(const std::string& alias)
 {
+	if (alias.empty())
+		throw std::invalid_argument("Alias is empty");
+	if (alias[0] != '/')
+		throw std::invalid_argument("Incorrect alias format");
 	_alias = alias;
 }
 
@@ -108,19 +116,22 @@ void LocationBlock::setReturn(const std::string& return_val)
 	_return = return_val;
 }
 
-void LocationBlock::setLocation(const std::string& location)
+void LocationBlock::setLocation(const std::string& location) // may not be needed
 {
 	_location = location;
-
 }
 
 void LocationBlock::setRoot(const std::string& root)
 {
+	if (root.empty()) // may need to check if the path is valid with !std::filesystem::exists(_root)
+		throw std::invalid_argument("Root is empty");
 	_root = root;
 }
 
 void LocationBlock::setIndex(const std::string& index)
 {
+	if (index.empty())
+		throw std::invalid_argument("Index is empty");
 	_index = index;
 }
 
@@ -131,26 +142,45 @@ void LocationBlock::setAutoindex(const std::string& autoindex)
 	else if (autoindex == "off")
 		_autoindex = false;
 	else
-		throw std::invalid_argument("incorrect autoindex format");
+		throw std::invalid_argument("Incorrect autoindex format");
 }
 
-void LocationBlock::setCgiExtension(const std::string& cgi_extension)
+void LocationBlock::setCgiExtension(const std:: vector<std::string>& cgi_extension)
 {
-	_cgi_extension = cgi_extension;
+	std::set<std::string> valid_extensions = {".sh", ".py", ".cgi", ".rb"};
+	if (cgi_extension.empty())
+		throw std::invalid_argument("CGI extension is empty");
+	for (size_t i = 0; i < cgi_extension.size(); i++)
+	{
+		if (cgi_extension[i][0] != '.')
+			throw std::invalid_argument("Incorrect cgi_extension format");
+		else if (valid_extensions.find(cgi_extension[i]) == valid_extensions.end())
+			throw std::invalid_argument("Invalid cgi_extension");
+		_cgi_extension.push_back(cgi_extension[i]);
+	}
 }
 
 void LocationBlock::setCgiPath(const std::string& cgi_path)
 {
+	if (cgi_path.empty())
+		throw std::invalid_argument("Cgi path is empty");
 	_cgi_path = cgi_path;
 }
 
 void LocationBlock::setUploadPath(const std::string& upload_path)
 {
+	if (upload_path.empty())
+		throw std::invalid_argument("Upload path is empty");
 	_upload_path = upload_path;
 }
 
 void LocationBlock::setProxyPass(const std::string& proxy_pass)
 {
+	if (proxy_pass.empty())
+		throw std::invalid_argument("Proxy pass is empty");
+	// std::regex url_pattern("^(http|https)://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$");
+	// if (!std::regex_match(_proxy_pass, url_pattern))
+	// 	throw std::invalid_argument("Invalid proxy pass URL format");
 	_proxy_pass = proxy_pass;
 }	
 void LocationBlock::setErrorPage(int code, const std::string& page)
@@ -160,6 +190,8 @@ void LocationBlock::setErrorPage(int code, const std::string& page)
 
 void LocationBlock::setLimitExcept(const std::vector<std::string>& values)
 {
+	if (values.empty())
+		throw std::invalid_argument("Limit except is empty");
 	for (size_t i = 0; i < values.size(); i++)
 	{
 		_limit_except.push_back(values[i]);
@@ -182,7 +214,14 @@ void LocationBlock::printLocationBlock()
 	std::cout << "Index: " << _index << std::endl;
 
 	if (!_cgi_extension.empty())
-	std::cout << "Cgi extension: " << _cgi_extension << std::endl;
+	{
+		std::cout << "Cgi extension: ";
+		for (const std::string& val : _cgi_extension)
+		{
+			std::cout << val << " ";
+		}
+		std::cout << std::endl;
+	}
 	if (!_cgi_path.empty())
 	std::cout << "Cgi path: " << _cgi_path << std::endl;
 	if (!_upload_path.empty())

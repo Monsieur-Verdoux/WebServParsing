@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:53:25 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/07 22:15:03 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:06:58 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,20 @@
 #include <string>
 #include <algorithm>
 
+
 class ServerBlock
 {
 private:
-	std::vector<std::string> _server_names;
+	std::string _server_name;
 	uint16_t _listen; //port, range 1-65535
 	std::vector<LocationBlock> _locations;
-	std::map<int, std::string> _error_pages;
+	std::map<int, std::string> _error_pages; // the way map is used, it overwrites the value if the key is the same, so maybe additional check is needed
 	std::string _host; // IP address, e.g. 127.0.0.1
 	size_t _client_max_body_size; // size in bytes, needs to be converted if in human-readable format
 public:
 	ServerBlock(/* args */);
 	~ServerBlock();
-	std::vector<std::string> getServerNames() const;
+	std::string getServerName() const;
 	int getListen() const;
 	std::vector<LocationBlock>& getLocations();	
 	std::map<int, std::string> getErrorPages() const;

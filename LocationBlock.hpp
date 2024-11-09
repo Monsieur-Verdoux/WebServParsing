@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:46:15 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/07 22:31:12 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:07:01 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <set>
+#include <regex>
 
 class LocationBlock
 {
@@ -25,7 +27,7 @@ class LocationBlock
 		std::string _root; // /var/www/html
 		std::string _index; // index.html
 		bool _autoindex; // on | off
-		std::string _cgi_extension;	// .php, .py, .pl, .rb
+		std::vector<std::string> _cgi_extension;	// .php, .py, .pl, .rb
 		std::string _cgi_path; // /usr/bin/php-cgi
 		std::string _upload_path; // /var/www/html/uploads
 		std::string _proxy_pass; // http://
@@ -42,7 +44,7 @@ class LocationBlock
 		std::string getRoot() const;
 		std::string getIndex() const;
 		bool getAutoindex() const;
-		std::string getCgiExtension() const;
+		std::vector<std::string> getCgiExtension() const;
 		std::string getCgiPath() const;
 		std::string getUploadPath() const;
 		std::string getProxyPass() const;
@@ -55,7 +57,7 @@ class LocationBlock
 		void setRoot(const std::string& root);
 		void setIndex(const std::string& index);
 		void setAutoindex(const std::string& autoindex);
-		void setCgiExtension(const std::string& cgi_extension);
+		void setCgiExtension(const std::vector<std::string>& cgi_extension);
 		void setCgiPath(const std::string& cgi_path);
 		void setUploadPath(const std::string& upload_path);
 		void setProxyPass(const std::string& proxy_pass);

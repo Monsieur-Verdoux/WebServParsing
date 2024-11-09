@@ -100,6 +100,8 @@
 			}
 			else if (_tokens[index].key == "listen")
 			{
+				if (!std::all_of(_tokens[index].values[0].begin(), _tokens[index].values[0].end(), ::isdigit))
+					throw std::invalid_argument("Listen port is not a number");
 				_server_blocks[_server_blocks.size() - 1].setListen(std::stoi(_tokens[index].values[0]));
 			}
 			else if (_tokens[index].key == "client_max_body_size")
@@ -112,6 +114,8 @@
 			}
 			else if (_tokens[index].key == "error_page")
 			{
+				if (_tokens[index].values[0].empty() || !std::all_of(_tokens[index].values[0].begin(), _tokens[index].values[0].end(), ::isdigit))
+					throw std::invalid_argument("Error code is not a number");
 				_server_blocks[_server_blocks.size() - 1].setErrorPage(std::stoi(_tokens[index].values[0]), _tokens[index].values[1]);
 			}
 			else if (_tokens[index].key == "location")
@@ -197,7 +201,7 @@
 			}
 			else if (_tokens[index].key == "cgi_ext")
 			{
-				_server_blocks[_server_blocks.size() - 1].getLocations().back().setCgiExtension(_tokens[index].values[0]);
+				_server_blocks[_server_blocks.size() - 1].getLocations().back().setCgiExtension(_tokens[index].values);
 			}
 			else if (_tokens[index].key == "return")
 			{
@@ -359,11 +363,8 @@
 		for (ServerBlock& server : _server_blocks)
 		{
 			std::cout << "--------------------------------" << std::endl;
-			std::cout << "Server names: ";
-			for (const std::string& name : server.getServerNames())
-			{
-				std::cout << name << " ";
-			}
+			std::cout << "Server name: ";
+			std::cout << server.getServerName() << std::endl;			
 			std::cout << std::endl;
 			std::cout << "Listen: " << server.getListen() << std::endl;
 			std::cout << "Client max body size: " << server.getClientMaxBodySize() << std::endl;
