@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 19:33:46 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/09 18:16:55 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:43:28 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,10 @@ void LocationBlock::setLocation(const std::string& location) // may not be neede
 
 void LocationBlock::setRoot(const std::string& root)
 {
-	if (root.empty()) // may need to check if the path is valid with !std::filesystem::exists(_root)
+	if (root.empty())
 		throw std::invalid_argument("Root is empty");
+	if (!std::filesystem::exists(root) || !std::filesystem::is_directory(root))
+		throw std::invalid_argument("Root is not a valid directory");
 	_root = root;
 }
 
@@ -164,6 +166,8 @@ void LocationBlock::setCgiPath(const std::string& cgi_path)
 {
 	if (cgi_path.empty())
 		throw std::invalid_argument("Cgi path is empty");
+	if (!std::filesystem::exists(cgi_path) || !std::filesystem::is_regular_file(cgi_path))
+		throw std::invalid_argument("CGI path is not a valid file");
 	_cgi_path = cgi_path;
 }
 
@@ -171,6 +175,8 @@ void LocationBlock::setUploadPath(const std::string& upload_path)
 {
 	if (upload_path.empty())
 		throw std::invalid_argument("Upload path is empty");
+	if (!std::filesystem::exists(upload_path) || !std::filesystem::is_directory(upload_path))
+		throw std::invalid_argument("Upload path is not a valid directory");
 	_upload_path = upload_path;
 }
 
@@ -178,13 +184,17 @@ void LocationBlock::setProxyPass(const std::string& proxy_pass)
 {
 	if (proxy_pass.empty())
 		throw std::invalid_argument("Proxy pass is empty");
-	// std::regex url_pattern("^(http|https)://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$");
-	// if (!std::regex_match(_proxy_pass, url_pattern))
-	// 	throw std::invalid_argument("Invalid proxy pass URL format");
+	std::regex url_pattern("^(http|https)://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$");
+	if (!std::regex_match(proxy_pass, url_pattern))
+		throw std::invalid_argument("Invalid proxy pass URL format");
 	_proxy_pass = proxy_pass;
 }	
 void LocationBlock::setErrorPage(int code, const std::string& page)
 {
+	if (page.empty())
+		throw std::invalid_argument("Error page is empty");
+	if (code < 100 || code > 599)
+		throw std::invalid_argument("Error code is out of range");
 	_error_pages[code] = page;
 }
 
@@ -192,6 +202,12 @@ void LocationBlock::setLimitExcept(const std::vector<std::string>& values)
 {
 	if (values.empty())
 		throw std::invalid_argument("Limit except is empty");
+	std::set<std::string> valid_methods = {"GET", "POST", "DELETE", "PUT", "HEAD"};
+	for (size_t i = 0; i < values.size(); i++)
+	{
+		if (valid_methods.find(values[i]) == valid_methods.end())
+			throw std::invalid_argument("Invalid limit except method");
+	}
 	for (size_t i = 0; i < values.size(); i++)
 	{
 		_limit_except.push_back(values[i]);
@@ -209,7 +225,7 @@ void LocationBlock::printLocationBlock()
 	if (!_location.empty())
 		std::cout << "Location: " << _location << std::endl;
 	if (!_root.empty())
-	std::cout << "Root: " << _root << std::endl;
+	std::cout << "Root: " << getRoot() << std::endl;
 	if (!_index.empty())
 	std::cout << "Index: " << _index << std::endl;
 

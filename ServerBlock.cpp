@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:45:23 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/09 17:20:21 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:31:36 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void ServerBlock::setLocations(const std::vector<LocationBlock>& locations)
 
 void ServerBlock::setErrorPage(int code, const std::string& page)
 {
+	if (page.empty())
+		throw std::invalid_argument("Error page is empty");
 	if (code < 100 || code > 599)
 		throw std::invalid_argument("Error code is out of range");
 	_error_pages[code] = page;

@@ -6,12 +6,12 @@
 #    By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/30 14:04:58 by akovalev          #+#    #+#              #
-#    Updated: 2024/10/30 19:38:47 by akovalev         ###   ########.fr        #
+#    Updated: 2024/11/12 17:44:45 by akovalev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := ConfigParser
-CFLAGS := 
+CFLAGS := -std=c++17 -Wall -Wextra -Werror
 SRC := ConfigParser.cpp ServerBlock.cpp LocationBlock.cpp
 OBJ := $(SRC:.cpp=.o)
 

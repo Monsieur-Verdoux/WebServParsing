@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 18:46:15 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/09 18:07:01 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:37:36 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <set>
 #include <regex>
+#include <filesystem>
 
 class LocationBlock
 {
@@ -30,8 +31,8 @@ class LocationBlock
 		std::vector<std::string> _cgi_extension;	// .php, .py, .pl, .rb
 		std::string _cgi_path; // /usr/bin/php-cgi
 		std::string _upload_path; // /var/www/html/uploads
-		std::string _proxy_pass; // http://
-		std::string _return;
+		std::string _proxy_pass; // http:// may actually not be needed as per subject
+		std::string _return;	// defines a return code and a URL to redirect to
 		std::string _alias;
 		size_t _client_max_body_size; // size in bytes, needs to be converted if in human-readable format
 		std::map<int, std::string> _error_pages;
