@@ -6,7 +6,7 @@
 /*   By: akovalev <akovalev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 19:33:46 by akovalev          #+#    #+#             */
-/*   Updated: 2024/11/12 18:43:28 by akovalev         ###   ########.fr       */
+/*   Updated: 2024/11/14 21:12:36 by akovalev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ LocationBlock::LocationBlock(/* args */)
 {
 	_autoindex = false;
 	_client_max_body_size = 0;
+	_return = std::make_pair(0, "");
 }
 
 LocationBlock::LocationBlock(std::string location)
@@ -23,6 +24,7 @@ LocationBlock::LocationBlock(std::string location)
 	_autoindex = false;
 	_client_max_body_size = 0;
 	_location = location;
+	_return = std::make_pair(0, "");
 }
 
 LocationBlock::~LocationBlock()
@@ -74,7 +76,7 @@ std::map<int, std::string> LocationBlock::getErrorPages() const
 	return _error_pages;
 }
 
-std::string LocationBlock::getReturn() const
+std::pair<int, std::string> LocationBlock::getReturn() const
 {
 	return _return;
 }
@@ -111,9 +113,19 @@ void LocationBlock::setAlias(const std::string& alias)
 	_alias = alias;
 }
 
-void LocationBlock::setReturn(const std::string& return_val)
+void LocationBlock::setReturn(std::string return_val, const std::string& url)
 {
-	_return = return_val;
+	if (!std::all_of(return_val.begin(), return_val.end(), ::isdigit))
+		throw std::invalid_argument("Incorrect return code format");
+	int code = std::stoi(return_val);
+	if (url.empty())
+		throw std::invalid_argument("Return URL is empty");
+	std::regex url_pattern("^(http|https)://[a-zA-Z0-9.-]+(/.*)?$");
+	if (!std::regex_match(url, url_pattern))
+		throw std::invalid_argument("Invalid return URL format");
+	if (code < 300 || code > 599)
+		throw std::invalid_argument("Return code is out of range");
+	_return = std::make_pair(code, url);
 }
 
 void LocationBlock::setLocation(const std::string& location) // may not be needed
@@ -245,8 +257,8 @@ void LocationBlock::printLocationBlock()
 
 	if (!_proxy_pass.empty())
 	std::cout << "Proxy pass: " << _proxy_pass << std::endl;
-	if (!_return.empty())
-	std::cout << "Return: " << _return << std::endl;
+	if (_return.first)
+	std::cout << "Return: " << _return.first << " " << _return.second << std::endl;
 	if (!_alias.empty())
 	std::cout << "Alias: " << _alias << std::endl;
 	if (_client_max_body_size)

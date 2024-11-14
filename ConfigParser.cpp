@@ -205,7 +205,7 @@
 			}
 			else if (_tokens[index].key == "return")
 			{
-				_server_blocks[_server_blocks.size() - 1].getLocations().back().setReturn(_tokens[index].values[0]);
+				_server_blocks[_server_blocks.size() - 1].getLocations().back().setReturn(_tokens[index].values[0], _tokens[index].values[1]);
 			}
 			else if (_tokens[index].key == "alias")
 			{
@@ -239,11 +239,11 @@
 		std::vector<std::string> singleValueKeys = {
 			"server_name", "location", "listen", "client_max_body_size", "proxy_pass", 
 			"root", "index", "autoindex", "cgi_pass", "upload_path", 
-			"upload_store", "upload_max_file_size", "server", "host", "alias", "return"
+			"upload_store", "upload_max_file_size", "server", "host", "alias"
 		};
 
 		std::vector<std::string> multiValueKeys = {
-			"limit_except", "cgi_ext", "error_page"
+			"limit_except", "cgi_ext", "error_page", "return"
 		};
 
 		std::string word;
